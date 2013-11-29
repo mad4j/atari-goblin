@@ -2,6 +2,7 @@
     temp1 = temp1
 
     set kernel DPC+
+
     set tv ntsc
     set kernel_options collision(playfield,player1)
 
@@ -49,10 +50,6 @@
 _MAIN
        
 _GameInit
-
-   bkcolors:
-    $00
-end
 
     scorecolors:
     $3E
@@ -110,17 +107,38 @@ end
     speed = 50
 
     facesCounter = 0
+
 _GameLoop
 
-   if !eatSound then goto _SkipEatSound
-   AUDV0 = EAT_SOUND_VOLUME
-   AUDC0 = 4
-   AUDF0 = EAT_SOUND_FREQUENCY
-   eatSound = eatSound - 1
-   if !eatSound then AUDV0 = 0
+    ; playfield vertical resolution (per quarter)
+    DF0FRACINC = 32
+    DF1FRACINC = 32
+    DF2FRACINC = 32
+    DF3FRACINC = 32
+
+    ; single color playfield
+    DF4FRACINC = 0
+
+    pfcolors:
+    $C8
+end
+
+    ; single color background
+    DF6FRACINC = 0
+
+    bkcolors:
+    $00
+end
+
+    if !eatSound then goto _SkipEatSound
+    AUDV0 = EAT_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = EAT_SOUND_FREQUENCY
+    eatSound = eatSound - 1
+    if !eatSound then AUDV0 = 0
 _SkipEatSound
 
-    if facesCounter > 0 then goto _SkipPlayFieldSetup 
+    if facesCounter > 0 then goto _SkipPlayFieldSetup
         gosub _PlayFieldSetup bank3
         gosub _OtherPlayersSetup bank3
 _SkipPlayFieldSetup
@@ -168,6 +186,8 @@ _SkipMoveUp
     temp1 = temp1
 
 _CheckPlayersCollision
+
+    if collision(player0, playfield) then gosub _GameOverLoop bank 3
 
     if !collision(player1,player0) then goto _SkipCollisionDetection
 
@@ -335,13 +355,22 @@ _PlayFieldSetup
         next
     next
 
-    DF0FRACINC = 32
-    DF1FRACINC = 32
-    DF2FRACINC = 32
-    DF3FRACINC = 32
-    DF4FRACINC = 0
-
-    pfcolors:
-    $C8
-end
     return otherbank
+
+_GameOverLoop
+
+    player1:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    return otherbank
+
