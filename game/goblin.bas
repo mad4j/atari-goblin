@@ -38,6 +38,12 @@
     dim frames = f
     dim speed = s
 
+    dim gameState = x
+    dim gameStage = y
+
+    const GAME_STATE_PLAYING  = 2
+    const GAME_STATE_GAMEOVER = 3
+
     goto _MAIN bank2
 
 
@@ -192,65 +198,49 @@ _CheckPlayersCollision
     if !collision(player1,player0) then goto _SkipCollisionDetection
 
     if player0y <> player1y then goto _SkipPlayer1Reset
-    player1:
-end
-    player1x=0
+ ;     player1:
+ ;end
+    player1x=0 : player1y=200
     goto _UpdateCollisionCheck
 _SkipPlayer1Reset
 
     if player0y <> player2y then goto _SkipPlayer2Reset 
-    player2:
-end
-    player2x=0
+    player2x=0 : player2y=200
     goto _UpdateCollisionCheck
 _SkipPlayer2Reset
 
     if player0y <> player3y then goto _SkipPlayer3Reset
-    player3:
-end
-    player3x=0
+    player3x=0 : player3y=200
     goto _UpdateCollisionCheck
 _SkipPlayer3Reset
 
     if player0y <> player4y then goto _SkipPlayer4Reset
-    player4:
-end
-    player4x=0
+    player4x=0 : player4y=200
     goto _UpdateCollisionCheck
 _SkipPlayer4Reset    
 
     if player0y <> player5y then goto _SkipPlayer5Reset
-    player5:
-end
-    player5x=0
+    player5x=0 : player5y=200
     goto _UpdateCollisionCheck
 _SkipPlayer5Reset
 
     if player0y <> player6y then goto _SkipPlayer6Reset
-    player6:
-end
-    player6x=0
+    player6x=0 : player6y=200
     goto _UpdateCollisionCheck
 _SkipPlayer6Reset
 
     if player0y <> player7y then goto _SkipPlayer7Reset
-    player7:
-end
-    player7x=0
+    player7x=0 : player7y=200
     goto _UpdateCollisionCheck
 _SkipPlayer7Reset
 
     if player0y <> player8y then goto _SkipPlayer8Reset
-    player8:
-end
-    player8x=0
+    player8x=0 : player8y=200
     goto _UpdateCollisionCheck
 _SkipPlayer8Reset
 
     if player0y <> player9y then goto _SkipPlayer9Reset
-    player9:
-end
-    player9x=0
+    player9x=0 : player9y=200
     goto _UpdateCollisionCheck
 _SkipPlayer9Reset
 
@@ -359,7 +349,9 @@ _PlayFieldSetup
 
 _GameOverLoop
 
-    player1:
+
+
+    player1-9:
     %00111100
     %01111110
     %11011011
