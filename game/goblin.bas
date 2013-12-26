@@ -19,6 +19,16 @@
     const EAT_SOUND_FREQUENCY = 25
     const EAT_SOUND_VOLUME = 8
 
+    dim crashSound = m
+    const CRASH_SOUND_LENGTH = 8
+    const CRASH_SOUND_FREQUENCY = 4
+    const CRASH_SOUND_VOLUME = 6
+
+    dim smileSound = m
+    const SMILE_SOUND_LENGTH = 8
+    const SMILE_SOUND_FREQUENCY = 4
+    const SMILE_SOUND_VOLUME = 6
+
     const GOBLIN_MIN_X   = 16
     const GOBLIN_MAX_X   = 136
     const GOBLIN_MIN_Y   = 0
@@ -136,6 +146,8 @@ end
     $00
 end
 
+    if gameState = GAME_STATE_GAMEOVER then gosub _GameOverLoop bank3 : drawscreen: goto _GameLoop
+
     if !eatSound then goto _SkipEatSound
     AUDV0 = EAT_SOUND_VOLUME
     AUDC0 = 4
@@ -193,7 +205,11 @@ _SkipMoveUp
 
 _CheckPlayersCollision
 
-    if collision(player0, playfield) then gosub _GameOverLoop bank 3
+    if !collision(player0, playfield) then goto _SkipPlayerCollision
+        gameState=GAME_STATE_GAMEOVER
+        gameStage=0
+        gosub _GameOverLoop bank 3
+_SkipPlayerCollision
 
     if !collision(player1,player0) then goto _SkipCollisionDetection
 
@@ -350,8 +366,88 @@ _PlayFieldSetup
 _GameOverLoop
 
 
+_GameOverLoopStage0
 
-    player1-9:
+    ; if stage 0 is active
+    if gameStage > 0 then goto _SkipGameOverLoopStage0
+
+    ; set goblin crash sprite
+    player0:
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %00000000
+    %01111110
+    %00111100
+end
+
+    missile1x = 0
+    missile1y = 200
+
+    if crashSound>0 then goto _SkipCrashSoundSetup
+    crashSound = CRASH_SOUND_LENGTH
+_SkipCrashSoundSetup
+
+    AUDV0 = CRASH_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = CRASH_SOUND_FREQUENCY
+    crashSound = crashSound-1
+
+    if crashSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage0   
+
+_GameOverLoopStage1
+    if gameStage > 1 then goto _SkipGameOverLoopStage1
+
+    if player1y=200 then goto _SkipNoFaceStage1
+
+    player1:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if smileSound>0 then goto _SkipSmileSoundSetup1
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup1
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+_SkipNoFaceStage1
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage1
+
+_GameOverLoopStage2
+    if gameStage > 2 then goto _SkipGameOverLoopStage2
+
+    if player2y=200 then goto _SkipNoFaceStage2
+
+    player2:
     %00111100
     %01111110
     %11011011
@@ -364,5 +460,252 @@ _GameOverLoop
     %00111100
 end
 
-    return otherbank
+    if smileSound>0 then goto _SkipSmileSoundSetup2
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup2
 
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+_SkipNoFaceStage2
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage2
+
+_GameOverLoopStage3
+    if gameStage > 3 then goto _SkipGameOverLoopStage3
+    player3:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if player3y=200 then goto _SkipGameOverLoopStage3
+
+    if smileSound>0 then goto _SkipSmileSoundSetup3
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup3
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage3
+
+_GameOverLoopStage4
+    if gameStage > 4 then goto _SkipGameOverLoopStage4
+    player4:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if player4y=200 then goto _SkipGameOverLoopStage4
+
+    if smileSound>0 then goto _SkipSmileSoundSetup4
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup4
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage4
+
+_GameOverLoopStage5
+    if gameStage > 5 then goto _SkipGameOverLoopStage5
+    player5:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+   if player5y=200 then goto _SkipGameOverLoopStage5
+
+    if smileSound>0 then goto _SkipSmileSoundSetup5
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup5
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage5
+
+_GameOverLoopStage6
+    if gameStage > 6 then goto _SkipGameOverLoopStage6
+    player6:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if player6y=200 then goto _SkipGameOverLoopStage6
+
+    if smileSound>0 then goto _SkipSmileSoundSetup6
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup6
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage6
+
+_GameOverLoopStage7
+    if gameStage > 7 then goto _SkipGameOverLoopStage7
+    player7:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if player7y=200 then goto _SkipGameOverLoopStage7
+
+    if smileSound>0 then goto _SkipSmileSoundSetup7
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup7
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage7
+
+_GameOverLoopStage8
+    if gameStage > 8 then goto _SkipGameOverLoopStage8
+    player8:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if player8y=200 then goto _SkipGameOverLoopStage8
+
+    if smileSound>0 then goto _SkipSmileSoundSetup8
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup8
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage8
+
+_GameOverLoopStage9
+    if gameStage > 9 then goto _SkipGameOverLoopStage9
+    player9:
+    %00111100
+    %01111110
+    %11011011
+    %11011011
+    %11111111
+    %10111101
+    %11000011
+    %11100111
+    %01111110
+    %00111100
+end
+
+    if player9y=200 then goto _SkipGameOverLoopStage9
+
+    if smileSound>0 then goto _SkipSmileSoundSetup9
+    smileSound = SMILE_SOUND_LENGTH
+_SkipSmileSoundSetup9
+
+    AUDV0 = SMILE_SOUND_VOLUME
+    AUDC0 = 4
+    AUDF0 = SMILE_SOUND_FREQUENCY
+    smileSound = smileSound-1
+
+    if smileSound>0 then return otherbank
+
+    AUDV0 = 0
+    gameStage = gameStage+1
+    return otherbank
+_SkipGameOverLoopStage9
+
+    return otherbank
