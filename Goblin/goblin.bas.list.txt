@@ -3206,9 +3206,9 @@
    1491  20d6				   .
    1492  20d6							;
    1493  20d6
-   1494  20d6				   .L044		;  missile1height  =  5
+   1494  20d6				   .L044		;  missile1height  =  4
    1495  20d6
-   1496  20d6		       a9 05		      LDA	#5
+   1496  20d6		       a9 04		      LDA	#4
    1497  20d8		       85 c3		      STA	missile1height
    1498  20da				   .
    1499  20da							;

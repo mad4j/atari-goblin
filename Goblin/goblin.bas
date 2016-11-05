@@ -81,7 +81,7 @@ end
     
 _Player0Setup
 
-    missile1height = 5
+    missile1height = 4
 
     COLUM1 = $1E
     _NUSIZ1 = $30
